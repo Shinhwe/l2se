@@ -27,6 +27,8 @@ namespace LineageIIServerEmulator.LoginServer
         {
             _Conn = Conn;
             _SessionId = Conn.GetHashCode();
+            // too slow > 1000ms
+            //TODO: cache it on redis
             ScrambledPair = new ScrambledKeyPair(ScrambledKeyPair.genKeyPair());
             _PublicKey = ScrambledPair.GetScrambledModulus();
             GenerateBlowfishKey();

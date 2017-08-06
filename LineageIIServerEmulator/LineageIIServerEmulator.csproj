@@ -43,11 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\AccountDAO.cs" />
+    <Compile Include="DataBase\L2Database.cs" />
     <Compile Include="LoginServer\Crypt\BlowfishCipher.cs" />
     <Compile Include="LoginServer\Crypt\LoginCrypt.cs" />
     <Compile Include="LoginServer\Crypt\ScrambledKeyPair.cs" />
     <Compile Include="LoginServer\L2LoginClient.cs" />
+    <Compile Include="LoginServer\LoginConfig.cs" />
     <Compile Include="LoginServer\LoginServer.cs" />
+    <Compile Include="LoginServer\Models\Account.cs" />
     <Compile Include="LoginServer\Session.cs" />
     <Compile Include="Packet\ClientPacket\L2ClientPacket.cs" />
     <Compile Include="Packet\ClientPacket\LoginClientPacket\AuthGameGuard.cs" />
@@ -63,12 +67,13 @@
     <Compile Include="Packet\ServerPacket\LoginServerPacket\Init.cs" />
     <Compile Include="Packet\ServerPacket\LoginServerPacket\ServerList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\LoadConfig.cs" />
+    <Compile Include="Utils\SHA512.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GameServer\" />
     <Folder Include="Network\" />
     <Folder Include="Script\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

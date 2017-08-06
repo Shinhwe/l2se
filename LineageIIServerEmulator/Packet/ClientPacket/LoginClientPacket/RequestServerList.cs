@@ -26,7 +26,8 @@ namespace LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket
         {
             if (_Client.CheckLogin(_loginOkId1, _loginOkId2))
             {
-                _Client.SendPacket(new ServerList());
+                //TODO: ServerList
+                //_Client.SendPacket(new ServerList());
             }
         }
     }

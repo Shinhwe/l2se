@@ -7,6 +7,7 @@ using LineageIIServerEmulator.LoginServer;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket;
+using LineageIIServerEmulator.LoginServer.Models;
 
 namespace LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket
 {
@@ -47,6 +48,8 @@ namespace LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket
             }
             UserName = PrepareString(Encoding.UTF8.GetString(decrypt, 0x5E, 14).ToLower());
             PassWord = PrepareString(Encoding.UTF8.GetString(decrypt, 0x6C, 16));
+            Account AC = new Account(UserName, PassWord);
+            Console.WriteLine(AC.IsPassWordCorrect());
             //TODO: 注册
             LoginSession Session = new LoginSession();
             _Client.SetLoginSession(Session);
