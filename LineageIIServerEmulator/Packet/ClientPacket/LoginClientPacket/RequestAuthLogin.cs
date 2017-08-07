@@ -8,6 +8,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket;
 using LineageIIServerEmulator.LoginServer.Models;
+using System.Text.RegularExpressions;
 
 namespace LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket
 {
@@ -48,12 +49,42 @@ namespace LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket
             }
             UserName = PrepareString(Encoding.UTF8.GetString(decrypt, 0x5E, 14).ToLower());
             PassWord = PrepareString(Encoding.UTF8.GetString(decrypt, 0x6C, 16));
-            Account AC = new Account(UserName, PassWord);
-            Console.WriteLine(AC.IsPassWordCorrect());
-            //TODO: 注册
-            LoginSession Session = new LoginSession();
-            _Client.SetLoginSession(Session);
-            _Client.SendPacket(new LoginSuccess(Session));
+            if(Regex.Match(UserName, LoginConfig.ACCOUNT_TEMPLATE).Success && Regex.Match(PassWord, LoginConfig.PASSWORD_TEMPLATE).Success)
+            {
+				Account AC = new Account(UserName, PassWord);
+                if (AC.IsExist())
+                {
+                    if (AC.IsPassWordCorrect())
+                    {
+                        LoginSession Session = new LoginSession();
+                        _Client.SetLoginSession(Session);
+                        _Client.SendPacket(new LoginSuccess(Session));
+                    }
+                    else
+                    {
+                        _Client.DisConnetion(LoginFailReason.REASON_USER_OR_PASS_WRONG);
+                    }
+                } 
+                else 
+                {
+                    if(LoginConfig.AUTO_CREATE_ACCOUNT)
+                    {
+                        AC.Register();
+						LoginSession Session = new LoginSession();
+						_Client.SetLoginSession(Session);
+						_Client.SendPacket(new LoginSuccess(Session));
+                    }
+                    else 
+                    {
+                        _Client.DisConnetion(LoginFailReason.REASON_ACCOUNT_INFO_INCORR);    
+                    }
+                }
+            } 
+            else 
+            {
+                _Client.DisConnetion(LoginFailReason.REASON_USER_OR_PASS_WRONG);
+            }
+
         }
         private string PrepareString(string Value)
         {

@@ -51,6 +51,7 @@
     <None Include="Config\LoginServer\Server.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Config\LoginServer\banlist.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LineageIIServerEmulator\LineageIIServerEmulator.csproj">

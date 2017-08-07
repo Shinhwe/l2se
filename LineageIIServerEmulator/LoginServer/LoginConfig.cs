@@ -15,6 +15,7 @@ namespace LineageIIServerEmulator.LoginServer
         public static string DATA_BASE_USER;
         public static string DATA_BASE_PASSWORD;
         public static bool AUTO_CREATE_ACCOUNT;
+        public static string ACCOUNT_TEMPLATE;
         public static void Load()
         {
             LoadConfiguration();
@@ -27,6 +28,8 @@ namespace LineageIIServerEmulator.LoginServer
             DATA_BASE_NAME = ServerSettings.GetProperty("DataBaseName", "l2se");
             DATA_BASE_USER = ServerSettings.GetProperty("DataBaseUser", "sa");
             DATA_BASE_PASSWORD = ServerSettings.GetProperty("DataBasePassWord", "123456");
+            ACCOUNT_TEMPLATE = ServerSettings.GetProperty("AccountTemplate", "123456");
+            PASSWORD_TEMPLATE = ServerSettings.GetProperty("PasswordTemplate", "123456");
             AUTO_CREATE_ACCOUNT = ServerSettings.GetProperty("AutoCreateAccount", true);
 
         }

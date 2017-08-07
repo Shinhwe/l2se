@@ -9,6 +9,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket;
+using System.Net;
 
 namespace LineageIIServerEmulator.LoginServer
 {
@@ -22,6 +24,7 @@ namespace LineageIIServerEmulator.LoginServer
         private LoginCrypt Crypt;
         private byte[] Buffer = new byte[8192];
         private LoginSession _Session;
+        private string ClientIp;
 
         public L2LoginClient(Socket Conn)
         {
@@ -35,6 +38,8 @@ namespace LineageIIServerEmulator.LoginServer
             Crypt = new LoginCrypt();
             Crypt.updateKey(_BlowfishKey);
             Conn.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, AynsReceive, null);
+            ClientIp = ((IPEndPoint)_Conn.RemoteEndPoint).Address.ToString();
+			SendPacket(new Init(this));
         }
 
         public void SetLoginSession(LoginSession Session)
@@ -88,6 +93,7 @@ namespace LineageIIServerEmulator.LoginServer
         }
         private void AynsReceive(IAsyncResult result)
         {
+			_Conn.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, AynsReceive, null);
             int BytesTransferred = _Conn.EndReceive(result);
             if (BytesTransferred <= 0)
             {
@@ -102,7 +108,11 @@ namespace LineageIIServerEmulator.LoginServer
             {
                 LoginClientPacketHandler Handler = new LoginClientPacketHandler(this, Packet);
             }
-            _Conn.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, AynsReceive, null);
+        }
+        public void DisConnetion(LoginFailReason Reason)
+        {
+            SendPacket(new LoginFail(Reason));
+            _Conn.Close();
         }
     }
 }
