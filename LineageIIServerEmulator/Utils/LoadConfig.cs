@@ -25,8 +25,8 @@ namespace LineageIIServerEmulator.Utils
                     string[] ConfigLine = Line.Split('=');
                     if (ConfigLine.Length == 2)
                     {
-                        string ConfigName = ConfigLine[0];
-                        string ConfigValue = ConfigLine[1];
+                        string ConfigName = ConfigLine[0].Trim();
+                        string ConfigValue = ConfigLine[1].Trim();
                         P.AddProperty(ConfigName, ConfigValue);
                     }
                 }
@@ -34,7 +34,7 @@ namespace LineageIIServerEmulator.Utils
             return P;
         }
     }
-    public class Properties
+    public class Properties : IDisposable
     {
         private Dictionary<string, string> _Properties = new Dictionary<string, string>();
 
@@ -93,6 +93,11 @@ namespace LineageIIServerEmulator.Utils
             {
                 _Properties.Add(Key, Value);
             }
+        }
+
+        public void Dispose()
+        {
+            _Properties = null;
         }
     }
 }

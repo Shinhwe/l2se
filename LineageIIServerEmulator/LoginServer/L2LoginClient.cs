@@ -25,6 +25,7 @@ namespace LineageIIServerEmulator.LoginServer
         private byte[] Buffer = new byte[8192];
         private LoginSession _Session;
         private string ClientIp;
+        private bool _Closed = false;
 
         public L2LoginClient(Socket Conn)
         {
@@ -93,26 +94,33 @@ namespace LineageIIServerEmulator.LoginServer
         }
         private void AynsReceive(IAsyncResult result)
         {
-			_Conn.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, AynsReceive, null);
-            int BytesTransferred = _Conn.EndReceive(result);
-            if (BytesTransferred <= 0)
+            if (!_Closed)
             {
-                return;
-            }
-            int PacketLength = BitConverter.ToUInt16(Buffer, 0);
-            PacketLength -= 2; //already read 2 bytes
-            byte[] Packet = new byte[PacketLength];
-            Array.Copy(Buffer, 2, Packet, 0, PacketLength);
-            bool DecryptReult = Decrypt(Packet);
-            if (DecryptReult)
-            {
-                LoginClientPacketHandler Handler = new LoginClientPacketHandler(this, Packet);
+                if(_Conn.Connected == false)
+                {
+                    return;
+                }
+                int BytesTransferred = _Conn.EndReceive(result);
+                _Conn.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, AynsReceive, null);
+                if (BytesTransferred <= 0)
+                {
+                    return;
+                }
+                int PacketLength = BitConverter.ToUInt16(Buffer, 0);
+                PacketLength -= 2; //already read 2 bytes
+                byte[] Packet = new byte[PacketLength];
+                Array.Copy(Buffer, 2, Packet, 0, PacketLength);
+                bool DecryptReult = Decrypt(Packet);
+                if (DecryptReult)
+                {
+                    LoginClientPacketHandler Handler = new LoginClientPacketHandler(this, Packet);
+                }
             }
         }
         public void DisConnetion(LoginFailReason Reason)
         {
             SendPacket(new LoginFail(Reason));
-            _Conn.Close();
+            _Closed = true;
         }
     }
 }

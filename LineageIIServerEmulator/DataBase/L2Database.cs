@@ -1,6 +1,7 @@
 ﻿using LineageIIServerEmulator.LoginServer;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -10,48 +11,135 @@ namespace LineageIIServerEmulator.DataBase
 {
     public class L2Database
     {
-        private static L2Database _Instance;
-        private string ConnStr = "";
-        private L2Database()
+        private string _TableName = "";
+        private string _Field = "*";
+        private string _WHERE = "1 = 1";
+        private string _Join = "";
+        private string _Limit = "";
+        private string _Group = "";
+        private string _Order = "";
+        private List<SqlParameter> _Params = new List<SqlParameter>();
+        private SQLHelper _Helper = SQLHelper.GetInstance();
+
+
+        public DataObject Find()
         {
-            ConnStr = @"data source=.;initial catalog="+LoginConfig.DATA_BASE_NAME+ ";user id=" + LoginConfig.DATA_BASE_USER + ";password=" + LoginConfig.DATA_BASE_PASSWORD + ";MultipleActiveResultSets=True";
+            List<DataObject> DataList = Select();
+            return DataList.Count > 0 ? DataList[0] : null;
         }
-
-        public static L2Database GetInstance()
+        public List<DataObject> Select()
         {
-            if (_Instance == null)
-            {
-                _Instance = new L2Database();
-            }
-            return _Instance;
-        }
-
-        public SqlConnection GetConnection()
-        {
-
+            List<DataObject> List = new List<DataObject>();
+            StringBuilder SB = new StringBuilder();
+            SB.Append("SELECT ");
+            SB.Append(_Limit);
+            SB.Append(_Field);
+            SB.Append(" FROM ");
+            SB.Append(_TableName);
+            SB.Append(_Join);
+            SB.Append(" WHERE ");
+            SB.Append(_WHERE);
+            SB.Append(_Group);
+            SB.Append(_Order);
+            var SQL = SB.ToString();
             try
             {
-                SqlConnection Conn = new SqlConnection(ConnStr);
-                Conn.Open();
-                return Conn;
+                DataTable DT = null;
+                if (_Params.Count != 0)
+                {
+                    DT = _Helper.ExecuteQuery(SQL, _Params.ToArray());
+                }
+                else
+                {
+                    DT = _Helper.ExecuteQuery(SQL);
+                }
+                if (DT != null)
+                {
+                    if (DT.Rows.Count > 0)
+                    {
+                        foreach (DataRow DR in DT.Rows)
+                        {
+                            DataObject Data = new DataObject();
+                            foreach (DataColumn Item in DT.Columns)
+                            {
+                                Data.Add(Item.ColumnName, DR[Item]);
+                            }
+                        }
+                    }
+                }
+                return List;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
 
-        public static void Close(SqlConnection Conn)
+        public L2Database Table(string TableName)
         {
-            try
-            {
-                Conn.Close();
-            }
-            catch (Exception)
-            {
-                //be quite
-            }
+            _TableName = TableName;
+            return this;
         }
 
+        public L2Database Where(string _Where)
+        {
+            _WHERE = _Where;
+            return this;
+        }
+
+        public L2Database Where(WhereStatement WhereStatement)
+        {
+            _WHERE += WhereStatement.ToString();
+            _Params.AddRange(WhereStatement.GetParas());
+            return this;
+        }
+
+        public L2Database Limit(int Value)
+        {
+            _Limit = " TOP " + Value.ToString();
+            return this;
+        }
+
+        public L2Database Order(string Value)
+        {
+            _Order = " ORDER BY " + Value;
+            return this;
+        }
+        public L2Database Join(string J)
+        {
+            return Join("INNER", J);
+        }
+        public L2Database Join(string JoinType, string Join)
+        {
+            _Join = " " + JoinType + " JOIN " + Join;
+            return this;
+        }
+
+        public L2Database Field(string _Field)
+        {
+            this._Field = _Field;
+            return this;
+        }
+
+        public L2Database Group(string Value)
+        {
+            _Group = " GROUP BY " + Value;
+            return this;
+        }
+
+        //public SqlConnection GetConnection()
+        //{
+
+        //    try
+        //    {
+        //        SqlConnection Conn = new SqlConnection(ConnStr);
+        //        Conn.Open();
+        //        return Conn;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
     }
 }

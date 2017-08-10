@@ -16,6 +16,7 @@ namespace LineageIIServerEmulator.LoginServer
         public static string DATA_BASE_PASSWORD;
         public static bool AUTO_CREATE_ACCOUNT;
         public static string ACCOUNT_TEMPLATE;
+        public static string PASSWORD_TEMPLATE;
         public static void Load()
         {
             LoadConfiguration();

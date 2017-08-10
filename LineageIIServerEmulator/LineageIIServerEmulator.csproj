@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAO\AccountDAO.cs" />
+    <Compile Include="DataBase\DataObject.cs" />
     <Compile Include="DataBase\L2Database.cs" />
+    <Compile Include="DataBase\SQLHelper.cs" />
+    <Compile Include="DataBase\WhereStatement.cs" />
     <Compile Include="LoginServer\Crypt\BlowfishCipher.cs" />
     <Compile Include="LoginServer\Crypt\LoginCrypt.cs" />
     <Compile Include="LoginServer\Crypt\ScrambledKeyPair.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Utils\SHA512.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DAO\" />
     <Folder Include="GameServer\" />
     <Folder Include="Network\" />
     <Folder Include="Script\" />
