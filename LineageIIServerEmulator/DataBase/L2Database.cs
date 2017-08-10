@@ -127,19 +127,41 @@ namespace LineageIIServerEmulator.DataBase
             return this;
         }
 
-        //public SqlConnection GetConnection()
-        //{
+        public bool Add(DataObject Data)
+        {
+            return false;
+        }
 
-        //    try
-        //    {
-        //        SqlConnection Conn = new SqlConnection(ConnStr);
-        //        Conn.Open();
-        //        return Conn;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
+        public bool Update(DataObject Data, WhereStatement Where)
+        {
+            return false;
+        }
+
+        public bool Delete(WhereStatement Where)
+        {
+            return false;
+        }
+
+        public List<DataObject> Query(string SQLText, SqlParameter[] Params)
+        {
+            List<DataObject> List = new List<DataObject>();
+            DataTable DT = null;
+            DT = _Helper.ExecuteQuery(SQLText, Params.ToArray());
+            if (DT != null)
+            {
+                if (DT.Rows.Count > 0)
+                {
+                    foreach (DataRow DR in DT.Rows)
+                    {
+                        DataObject Data = new DataObject();
+                        foreach (DataColumn Item in DT.Columns)
+                        {
+                            Data.Add(Item.ColumnName, DR[Item]);
+                        }
+                    }
+                }
+            }
+            return List;
+        }
     }
 }

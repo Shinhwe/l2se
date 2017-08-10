@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DAO\" />
+    <Folder Include="Exception\" />
     <Folder Include="GameServer\" />
     <Folder Include="Network\" />
     <Folder Include="Script\" />

@@ -1,4 +1,5 @@
 ﻿using LineageIIServerEmulator.DataBase;
+using LineageIIServerEmulator.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,9 @@ namespace LineageIIServerEmulator.LoginServer.Models
 
         public bool IsExist()
         {
-            return false;
+            L2Database DB = new L2Database();
+            var UserModel = DB.Table("account").Where(new WhereStatement("login", _UserName)).Find();
+            return UserModel != null;
         }
 
         public bool IsPassWordCorrect()
@@ -31,7 +34,11 @@ namespace LineageIIServerEmulator.LoginServer.Models
 
         public void Register()
         {
-
+            L2Database DB = new L2Database();
+            DataObject Object = new DataObject();
+            Object.Add("login", _UserName);
+            Object.Add("password", SHA512.Encrypt(_PassWord));
+            DB.Table("account").Add(Object);
         }
 
         public void Login()

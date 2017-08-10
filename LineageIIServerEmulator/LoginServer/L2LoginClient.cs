@@ -40,7 +40,7 @@ namespace LineageIIServerEmulator.LoginServer
             Crypt.updateKey(_BlowfishKey);
             Conn.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, AynsReceive, null);
             ClientIp = ((IPEndPoint)_Conn.RemoteEndPoint).Address.ToString();
-			SendPacket(new Init(this));
+            SendPacket(new Init(this));
         }
 
         public void SetLoginSession(LoginSession Session)
@@ -53,7 +53,7 @@ namespace LineageIIServerEmulator.LoginServer
             return ScrambledPair.GetPrivateKey();
         }
 
-        public bool CheckLogin(int Id1,int Id2)
+        public bool CheckLogin(int Id1, int Id2)
         {
             return _Session.GetLoginId1() == Id1 && _Session.GetLoginId2() == Id2;
         }
@@ -78,12 +78,18 @@ namespace LineageIIServerEmulator.LoginServer
         public void SendPacket(L2ServerPacket Packet)
         {
             byte[] PacketBytes = Packet.GetBytes();
-            PacketBytes = Crypt.Encrypt(PacketBytes);
-            MemoryStream s = new MemoryStream();
-            byte[] PacketLength = BitConverter.GetBytes((short)(PacketBytes.Length + 2));
-            s.Write(PacketLength, 0, PacketLength.Length);
-            s.Write(PacketBytes, 0, PacketBytes.Length);
-            _Conn.Send(s.ToArray());
+            using (Packet)
+            {
+                PacketBytes = Crypt.Encrypt(PacketBytes);
+                using (MemoryStream s = new MemoryStream())
+                {
+                    byte[] PacketLength = BitConverter.GetBytes((short)(PacketBytes.Length + 2));
+                    s.Write(PacketLength, 0, PacketLength.Length);
+                    s.Write(PacketBytes, 0, PacketBytes.Length);
+                    PacketBytes = s.ToArray();
+                }
+            }
+            _Conn.Send(PacketBytes);
         }
 
         private void GenerateBlowfishKey()
@@ -96,7 +102,7 @@ namespace LineageIIServerEmulator.LoginServer
         {
             if (!_Closed)
             {
-                if(_Conn.Connected == false)
+                if (_Conn.Connected == false)
                 {
                     return;
                 }
