@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket
 {
-    public class ServerList : L2ServerPacket
+  public class ServerList : L2LoginServerPacket
+  {
+    public ServerList()
     {
-        public ServerList()
-        {
-            write();
-        }
-        protected override void writeImpl()
-        {
-
-        }
+      write();
     }
+    protected override void writeImpl()
+    {
+
+    }
+  }
 }

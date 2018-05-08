@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace LineageIIServerEmulator.Utils
 {
-    public class SHA512
+  public class SHA512
+  {
+    public static string Encrypt(string Password)
     {
-        public static string Encrypt(string Password)
-        {
-            byte[] PasswordBytes = Encoding.UTF8.GetBytes(Password);
-            byte[] HashBytes = new SHA512Managed().ComputeHash(PasswordBytes);
+      byte[] PasswordBytes = Encoding.UTF8.GetBytes(Password);
+      byte[] HashBytes = new SHA512Managed().ComputeHash(PasswordBytes);
 
-            string PasswordHash = Convert.ToBase64String(HashBytes);
-            return PasswordHash;
-        }
+      string PasswordHash = Convert.ToBase64String(HashBytes);
+      return PasswordHash;
     }
+  }
 }
