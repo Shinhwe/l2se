@@ -1,0 +1,11 @@
+﻿<Controls:MetroWindow x:Class="LoginServerGUI.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      Title="登录服务器"
+                      Height="600"
+                      Width="800">
+	<DockPanel Name="OutputPanel" Margin="10,10,10,10">
+		<TextBox  Name="OutputTextBox" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" IsReadOnly="True" AutomationProperties.Name="OutputText" Height="{Binding Path=ActualHeight, ElementName=OutputPanel}"/>
+	</DockPanel>
+</Controls:MetroWindow>
