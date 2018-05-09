@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket
+namespace LineageIIServerEmulator.Packet.PacketToSend.Client
 {
   public class LoginSuccess : L2LoginServerPacket
   {

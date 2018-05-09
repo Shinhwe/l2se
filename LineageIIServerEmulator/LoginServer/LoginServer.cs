@@ -1,4 +1,4 @@
-﻿using LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket;
+﻿using LineageIIServerEmulator.Packet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +19,7 @@ namespace LineageIIServerEmulator.LoginServer
     private LoginServer()
     {
       LoginConfig.Load();
+      Utils.Crypt.ScrambledKeyPair.Init();
       InitLoginServer();
     }
     public static LoginServer GetInstance()

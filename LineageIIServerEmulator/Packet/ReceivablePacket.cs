@@ -10,11 +10,11 @@ namespace LineageIIServerEmulator.Packet
 {
   public abstract class ReceivablePacket
   {
-    protected L2LoginClient _Client;
+    protected L2Client _Client;
     protected byte[] _Packet;
     private int _OffSet = 1;
 
-    public ReceivablePacket(L2LoginClient Client, byte[] Packet)
+    public ReceivablePacket(L2Client Client, byte[] Packet)
     {
       _Client = Client;
       _Packet = Packet;

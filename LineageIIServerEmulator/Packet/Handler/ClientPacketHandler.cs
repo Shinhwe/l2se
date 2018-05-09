@@ -1,5 +1,5 @@
 ﻿using LineageIIServerEmulator.LoginServer;
-using LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket;
+using LineageIIServerEmulator.Packet.PacketToReceive.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,9 @@ namespace LineageIIServerEmulator.Packet.Handler
 {
   public class ClientPacketHandler
   {
-    private L2LoginClient _Client;
+    private L2Client _Client;
     private byte[] _Packet;
-    public ClientPacketHandler(L2LoginClient Client, byte[] Packet)
+    public ClientPacketHandler(L2Client Client, byte[] Packet)
     {
       _Client = Client;
       _Packet = Packet;

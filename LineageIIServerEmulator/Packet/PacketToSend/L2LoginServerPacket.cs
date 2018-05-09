@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LineageIIServerEmulator.Packet.ServerPacket
+namespace LineageIIServerEmulator.Packet.PacketToSend
 {
   public abstract class L2LoginServerPacket : SendablePacket
   {

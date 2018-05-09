@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LineageIIServerEmulator.Packet.ClientPacket
+namespace LineageIIServerEmulator.Packet.PacketToReceive.Client
 {
   public abstract class L2ClientPacket : ReceivablePacket
   {
 
-    public L2ClientPacket(L2LoginClient Client, byte[] Packet) : base(Client, Packet)
+    public L2ClientPacket(L2Client Client, byte[] Packet) : base(Client, Packet)
     {
     }
 

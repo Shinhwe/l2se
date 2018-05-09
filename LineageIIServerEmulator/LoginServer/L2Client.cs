@@ -1,7 +1,4 @@
-﻿using LineageIIServerEmulator.LoginServer.Crypt;
-using LineageIIServerEmulator.Packet;
-using LineageIIServerEmulator.Packet.Handler;
-using LineageIIServerEmulator.Packet.ServerPacket;
+﻿using LineageIIServerEmulator.Utils.Crypt;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,8 +6,10 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket;
 using System.Net;
+using LineageIIServerEmulator.Packet;
+using LineageIIServerEmulator.Packet.Handler;
+using LineageIIServerEmulator.Packet.PacketToSend.Client;
 
 namespace LineageIIServerEmulator.LoginServer
 {
@@ -27,17 +26,16 @@ namespace LineageIIServerEmulator.LoginServer
     private string ClientIp;
     private bool _Closed = false;
 
+
+
     public L2Client(Socket Conn)
     {
       _Conn = Conn;
       _SessionId = Conn.GetHashCode();
-      // too slow > 1000ms
-      //TODO: cache it on redis
-      ScrambledPair = new ScrambledKeyPair(ScrambledKeyPair.genKeyPair());
+      ScrambledPair = new ScrambledKeyPair();
       _PublicKey = ScrambledPair.GetScrambledModulus();
       GenerateBlowfishKey();
-      Crypt = new LoginCrypt();
-      Crypt.updateKey(_BlowfishKey);
+      Crypt = new LoginCrypt(_BlowfishKey);
       Conn.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, AynsReceive, null);
       ClientIp = ((IPEndPoint)_Conn.RemoteEndPoint).Address.ToString();
       SendPacket(new Init(this));
@@ -75,7 +73,7 @@ namespace LineageIIServerEmulator.LoginServer
     {
       return _BlowfishKey;
     }
-    public void SendPacket(L2LoginServerPacket Packet)
+    public void SendPacket(SendablePacket Packet)
     {
       byte[] PacketBytes = Packet.GetBytes();
       using (Packet)

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LineageIIServerEmulator.LoginServer;
 
-namespace LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket
+namespace LineageIIServerEmulator.Packet.PacketToSend.Client
 {
   public enum LoginFailReason
   {

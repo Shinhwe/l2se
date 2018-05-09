@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using LineageIIServerEmulator.LoginServer;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
-using LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket;
 using LineageIIServerEmulator.LoginServer.Models;
 using System.Text.RegularExpressions;
+using LineageIIServerEmulator.Packet.PacketToSend.Client;
 
-namespace LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket
+namespace LineageIIServerEmulator.Packet.PacketToReceive.Client
 {
   public class RequestAuthLogin : L2ClientPacket
   {
     private byte[] _Raw = new byte[128];
-    public RequestAuthLogin(L2LoginClient Client, byte[] Packet) : base(Client, Packet)
+    public RequestAuthLogin(L2Client Client, byte[] Packet) : base(Client, Packet)
     {
       handler();
     }

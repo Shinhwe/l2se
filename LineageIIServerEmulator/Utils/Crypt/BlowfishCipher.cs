@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LineageIIServerEmulator.LoginServer.Crypt
+namespace LineageIIServerEmulator.Utils.Crypt
 {
     public class BlowfishCipher
     {

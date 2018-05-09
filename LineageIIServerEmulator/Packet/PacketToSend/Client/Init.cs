@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket
+namespace LineageIIServerEmulator.Packet.PacketToSend.Client
 {
   public class Init : L2LoginServerPacket
   {
@@ -13,7 +13,7 @@ namespace LineageIIServerEmulator.Packet.ServerPacket.LoginServerPacket
 
     private byte[] _PublicKey;
     private byte[] _BlowfishKey;
-    public Init(L2LoginClient Client)
+    public Init(L2Client Client)
     {
       _SessionId = Client.GetSessionId();
       _PublicKey = Client.GetPublicKey();

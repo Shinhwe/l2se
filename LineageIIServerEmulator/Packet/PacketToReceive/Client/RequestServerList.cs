@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using LineageIIServerEmulator.LoginServer;
 
-namespace LineageIIServerEmulator.Packet.ClientPacket.LoginClientPacket
+namespace LineageIIServerEmulator.Packet.PacketToReceive.Client
 {
   public class RequestServerList : L2ClientPacket
   {
     private int _loginOkId1;
     private int _loginOkId2;
-    public RequestServerList(L2LoginClient Client, byte[] Packet) : base(Client, Packet)
+    public RequestServerList(L2Client Client, byte[] Packet) : base(Client, Packet)
     {
       handler();
     }
