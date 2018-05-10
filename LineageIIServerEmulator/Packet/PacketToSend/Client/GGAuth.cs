@@ -12,7 +12,6 @@ namespace LineageIIServerEmulator.Packet.PacketToSend.Client
     public GGAuth(int SessionId)
     {
       _SessionId = SessionId;
-      write();
     }
     protected override void writeImpl()
     {

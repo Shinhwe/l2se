@@ -10,7 +10,6 @@ namespace LineageIIServerEmulator.Packet.PacketToSend.Client
   {
     public ServerList()
     {
-      write();
     }
     protected override void writeImpl()
     {

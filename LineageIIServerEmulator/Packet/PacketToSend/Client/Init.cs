@@ -18,7 +18,6 @@ namespace LineageIIServerEmulator.Packet.PacketToSend.Client
       _SessionId = Client.GetSessionId();
       _PublicKey = Client.GetPublicKey();
       _BlowfishKey = Client.GetBlowfishKey();
-      write();
     }
     protected override void writeImpl()
     {

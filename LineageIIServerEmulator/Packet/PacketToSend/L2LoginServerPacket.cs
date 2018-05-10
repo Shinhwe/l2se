@@ -9,6 +9,11 @@ namespace LineageIIServerEmulator.Packet.PacketToSend
   public abstract class L2LoginServerPacket : SendablePacket
   {
 
+    public L2LoginServerPacket()
+    {
+      write();
+    }
+
     public override bool write()
     {
       try

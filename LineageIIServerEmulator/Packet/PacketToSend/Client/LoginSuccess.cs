@@ -13,7 +13,6 @@ namespace LineageIIServerEmulator.Packet.PacketToSend.Client
     public LoginSuccess(LoginSession Session)
     {
       _Session = Session;
-      write();
     }
     protected override void writeImpl()
     {

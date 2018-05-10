@@ -53,7 +53,6 @@ namespace LineageIIServerEmulator.Packet.PacketToSend.Client
     public LoginFail(LoginFailReason Reason)
     {
       _Reason = (int)Reason;
-      write();
     }
     protected override void writeImpl()
     {
