@@ -10,7 +10,7 @@ namespace LineageIIServerEmulator.Utils.Crypt
   public class LoginCrypt
   {
     private bool updatedKey = false;
-    private byte[] key =
+    private byte[] staticKey =
     {
       0x6b,
       0x60,
@@ -29,12 +29,14 @@ namespace LineageIIServerEmulator.Utils.Crypt
       0x6c,
       0x6c
     };
+    private byte[] key;
     private BlowfishCipher cipher;
     private Random rnd;
 
     public LoginCrypt(byte[] key)
     {
-      this.cipher = new BlowfishCipher(key);
+      this.key = key;
+      this.cipher = new BlowfishCipher(staticKey);
       this.rnd = new Random(DateTime.Now.Millisecond);
     }
 

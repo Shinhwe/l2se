@@ -14,7 +14,8 @@ namespace LoginServerGUI
     {
       InitializeComponent();
 
-      Console.SetOut(new TextBoxWriter(OutputTextBox, Dispatcher));
+      Console.SetOut(new TextBoxWriter(OutputTextBox));
+      Console.SetError(new TextBoxWriter(OutputTextBox));
 
       new Task(delegate { LoginServer.GetInstance(); }).Start();
     }

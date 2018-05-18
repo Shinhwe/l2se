@@ -1,6 +1,10 @@
 ﻿using LineageIIServerEmulator.Packet;
+using log4net;
+using log4net.Config;
+using log4net.Repository;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -16,8 +20,12 @@ namespace LineageIIServerEmulator.LoginServer
     private Socket _LoginSocket;
     L2Client Client;
     L2GameServerClient GameServerClient;
+    private readonly ILog Log;
     private LoginServer()
     {
+      ILoggerRepository LoginServerRepository = LogManager.CreateRepository("LoginServerRepository");
+      XmlConfigurator.Configure(LoginServerRepository, new FileInfo("./config/loginserver/log4net.config"));
+      Log = LogManager.GetLogger("LoginServerRepository", typeof(LoginServer));
       LoginConfig.Load();
       Utils.Crypt.ScrambledKeyPair.Init();
       InitLoginServer();
@@ -39,14 +47,14 @@ namespace LineageIIServerEmulator.LoginServer
         _LoginServerSocket.Bind(LoginServerIP);
         _LoginServerSocket.Listen(100);
         _LoginServerSocket.BeginAccept(LoginServerAction, null);
-        Console.WriteLine("开始监听" + LoginConfig.LOGIN_SERVER_PORT + "端口...等待连接...");
+        Log.Info("开始监听" + LoginConfig.LOGIN_SERVER_PORT + "端口...等待连接...");
 
         IPEndPoint LoginIP = new IPEndPoint(IPAddress.Parse(LoginConfig.LOGIN_HOST), LoginConfig.LOGIN_PORT);
-        _LoginServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        _LoginServerSocket.Bind(LoginIP);
-        _LoginServerSocket.Listen(100);
-        _LoginServerSocket.BeginAccept(LoginAction, null);
-        Console.WriteLine("开始监听" + LoginConfig.LOGIN_PORT + "端口...等待连接...");
+        _LoginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        _LoginSocket.Bind(LoginIP);
+        _LoginSocket.Listen(100);
+        _LoginSocket.BeginAccept(LoginAction, null);
+        Log.Info("开始监听" + LoginConfig.LOGIN_PORT + "端口...等待连接...");
       }
       catch (Exception e)
       {

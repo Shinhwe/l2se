@@ -11,7 +11,6 @@ namespace LineageIIServerEmulator.Packet.PacketToSend
 
     public L2LoginServerPacket()
     {
-      write();
     }
 
     public override bool write()
@@ -23,6 +22,7 @@ namespace LineageIIServerEmulator.Packet.PacketToSend
       }
       catch (Exception e)
       {
+        throw e;
       }
       return false;
     }

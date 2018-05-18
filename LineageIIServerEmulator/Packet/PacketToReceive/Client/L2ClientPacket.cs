@@ -13,22 +13,5 @@ namespace LineageIIServerEmulator.Packet.PacketToReceive.Client
     public L2ClientPacket(L2Client Client, byte[] Packet) : base(Client, Packet)
     {
     }
-
-    public override bool handler()
-    {
-      try
-      {
-        readImpl();
-        handlerImpl();
-        return true;
-      }
-      catch (Exception e)
-      {
-        return false;
-      }
-    }
-
-    protected abstract void readImpl();
-    protected abstract void handlerImpl();
   }
 }

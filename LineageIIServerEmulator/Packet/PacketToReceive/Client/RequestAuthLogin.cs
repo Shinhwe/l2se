@@ -9,6 +9,7 @@ using Org.BouncyCastle.Crypto.Engines;
 using LineageIIServerEmulator.LoginServer.Models;
 using System.Text.RegularExpressions;
 using LineageIIServerEmulator.Packet.PacketToSend.Client;
+using System.Security.Cryptography;
 
 namespace LineageIIServerEmulator.Packet.PacketToReceive.Client
 {
@@ -17,30 +18,13 @@ namespace LineageIIServerEmulator.Packet.PacketToReceive.Client
     private byte[] _Raw = new byte[128];
     public RequestAuthLogin(L2Client Client, byte[] Packet) : base(Client, Packet)
     {
-      handler();
-    }
-    protected override void readImpl()
-    {
       _Raw = ReadBytes(_Raw.Length);
-      // read this for what ?
-      //readD();
-      //readD();
-      //readD();
-      //readD();
-      //readD();
-      //readD();
-      //readH();
-      //readC();
-    }
-
-    protected override void handlerImpl()
-    {
       string UserName = "";
       string PassWord = "";
-      CipherParameters PrivateKey = _Client.GetPrivateKey();
-      RSAEngine rsa = new RSAEngine();
-      rsa.init(false, PrivateKey);
-      byte[] decrypt = rsa.processBlock(_Raw, 0, 128);
+      AsymmetricKeyParameter PrivateKey = _Client.GetPrivateKey();
+      RsaEngine rsa = new RsaEngine();
+      rsa.Init(false, PrivateKey);
+      byte[] decrypt = rsa.ProcessBlock(_Raw, 0, 128);
       if (decrypt.Length < 128)
       {
         byte[] temp = new byte[128];

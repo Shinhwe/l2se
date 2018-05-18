@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -13,6 +14,7 @@ namespace LineageIIServerEmulator.Utils.Crypt
 {
   public class ScrambledKeyPair
   {
+    private static readonly ILog Log = LogManager.GetLogger(typeof(ScrambledKeyPair));
     public AsymmetricCipherKeyPair _pair;
     public byte[] _scrambledModulus;
     private static AsymmetricCipherKeyPair[] _KeyPairs = new AsymmetricCipherKeyPair[10];
@@ -20,30 +22,32 @@ namespace LineageIIServerEmulator.Utils.Crypt
     private static AsymmetricCipherKeyPair GeneratorKeyPair() 
     {
       SecureRandom rnd = new SecureRandom();
-      RSAKeyGenerationParameters par = new RSAKeyGenerationParameters(BigInteger.valueOf(65537), rnd, 1024, 10);
-      RSAKeyPairGenerator gen = new RSAKeyPairGenerator();
-      gen.init(par);
-      AsymmetricCipherKeyPair keys = gen.generateKeyPair();
+      RsaKeyGenerationParameters par = new RsaKeyGenerationParameters(BigInteger.ValueOf(65537), rnd, 1024, 10);
+      RsaKeyPairGenerator gen = new RsaKeyPairGenerator();
+      gen.Init(par);
+      AsymmetricCipherKeyPair keys = gen.GenerateKeyPair();
       return keys;
     }
     
     public static void Init()
     {
+      Log.Info("开始缓存RSA密钥");
       for (var i = 0; i < 10; i++) 
       {
         _KeyPairs[i] = GeneratorKeyPair();
       }
+      Log.Info($"缓存[{_KeyPairs.Length}]个RSA密钥");
     }
 
     public ScrambledKeyPair()
     {
       _pair = _KeyPairs[new Random().Next(0, 10)];
-      _scrambledModulus = scrambleModulus(((RSAKeyParameters)_pair.getPublic()).getModulus());
+      _scrambledModulus = scrambleModulus(((RsaKeyParameters)_pair.Public).Modulus);
     }
 
     private byte[] scrambleModulus(BigInteger modulus)
     {
-      byte[] scrambledMod = modulus.toByteArray();
+      byte[] scrambledMod = modulus.ToByteArray();
 
       if ((scrambledMod.Length == 0x81) && (scrambledMod[0] == 0x00))
       {
@@ -84,12 +88,12 @@ namespace LineageIIServerEmulator.Utils.Crypt
 
     public AsymmetricKeyParameter GetPrivateKey()
     {
-      return _pair.getPrivate();
+      return _pair.Private;
     }
 
     public AsymmetricKeyParameter GetPublicKey()
     {
-      return _pair.getPublic();
+      return _pair.Public;
     }
   }
 }

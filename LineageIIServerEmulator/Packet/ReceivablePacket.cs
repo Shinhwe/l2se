@@ -69,9 +69,5 @@ namespace LineageIIServerEmulator.Packet
       //        SB.Append(ch);
       //    return SB.ToString();
     }
-
-
-
-    public abstract bool handler();
   }
 }
